@@ -29,7 +29,7 @@ int main()
   int spike_begin, spike_end;
   double approx_error,error_threshold;
   int delta;
-  int w, step;
+  int step;
   BarrierDistribution* distributions[2];
   BarrierDistribution* stationary;
   
