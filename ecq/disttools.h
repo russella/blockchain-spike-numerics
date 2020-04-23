@@ -19,7 +19,7 @@ limitations under the License.
 
 enum InitializationType {zero, identity};
 
-const int maxsteps = 2000;
+const int maxsteps = 10000;
 const int footprint = 2 * maxsteps + 1;
 const int maxdelta = 30;
 

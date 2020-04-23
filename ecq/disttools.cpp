@@ -70,13 +70,13 @@ Dist_index* Dist_index::evolve(int adversarial,
 
 //class Distribution;
 
-double Poisson(double lambda, int k) {
-  if (k < 0) throw std::invalid_argument("Poisson index out of range");
-  double result = 1.0;
-  for (int i=1; i <= k; i++)
-    result = result * (lambda / i);
-  return( exp(-lambda) * result );
-}
+// double Poisson(double lambda, int k) {
+//   if (k < 0) throw std::invalid_argument("Poisson index out of range");
+//   double result = 1.0;
+//   for (int i=1; i <= k; i++)
+//     result = result * (lambda / i);
+//   return( exp(-lambda) * result );
+// }
 
 void Distribution::show() const {
   cout << "Distribution contents...\n";
@@ -172,28 +172,30 @@ Distribution::Distribution(const Distribution* orig) : delta(orig->delta) {
 // }
 
 Distribution* evolve(const Distribution* source,
-		     double adv_param,
-		     double hon_param) {
+		     double adv_prob,
+		     double hon_prob) {
   double h_transitions[2];
+  double a_transitions[2];
   Distribution* result;
   Dist_index* source_index;
   Dist_index* target_index;
   
-  h_transitions[0] = 1- hon_param;
-  h_transitions[1] = hon_param;
+  h_transitions[0] = 1- hon_prob;
+  h_transitions[1] = hon_prob;
+  a_transitions[0] = 1- adv_prob;
+  a_transitions[1] = adv_prob;
   source_index = new Dist_index(source->delta,0,0);
   result = new Distribution(source->delta,zero);
   for (int hon : {0, 1}) // Honest move
-    for (int adv=0; adv <= 20; adv++)  // Adversarial move
-      for (int beta=-maxsteps+hon; beta <= (maxsteps-adv); beta++)
+    for (int adv : {0, 1})  // Adversarial move
+      for (int beta=-(maxsteps-hon); beta <= (maxsteps-adv); beta++)
 	for (int transition=0; transition <= source->delta; transition++) {
 	  source_index->set(beta,transition);
 	  target_index = source_index->evolve(adv,hon);
-	  if (source->get(source_index) != 0) {
-	    result->set(target_index,result->get(target_index)
-			+ (source->get(source_index)
-			   * Poisson(adv_param,adv)
-			   * h_transitions[hon])); }
+	  result->set(target_index,result->get(target_index)
+		      + (source->get(source_index)
+			 * a_transitions[adv]
+			 * h_transitions[hon])); 
 	  delete(target_index);	};
   delete(source_index);
   return(result);

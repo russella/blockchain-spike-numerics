@@ -28,7 +28,6 @@ int main()
   double adv_stake;
   double hon_prob;
   double adv_prob;
-  double adv_param;
   int delta;
   double f;
   int w, step;
@@ -45,16 +44,14 @@ int main()
   
   hon_prob = 1-pow((1-f),hon_stake);
   cout << "Probability of honest success: " <<  hon_prob << "\n"; 
-  cout << "Effective rate of honest growth: " << 1/(delta-1+1/hon_prob) << "\n";
+  cout << "Effective rate of honest advancement: " << 1/(delta-1+1/hon_prob) << "\n";
   
   adv_stake = 1 - hon_stake;
-  adv_prob = 1-pow((1-f),adv_stake);
-  adv_param = -log(1 - f) * adv_stake;
+  adv_prob = 1 - pow((1-f),adv_stake);
   cout << "Adversarial stake ratio: " << adv_stake << "\n";
   cout << "Adversarial success probability: " <<  adv_prob << "\n";
-  cout << "Equivalent adversarial poisson parameter: " << adv_param << "\n";
-  cout << "...equal to expected rate of adversarial advancement: " << adv_param << "\n";
-
+  cout << "...equal to expected rate of adversarial advancement: " << adv_prob << "\n";
+  
 
   cout << "Enter number of steps of evolution (no more than " << maxsteps << "): ";
   cin  >> w;
@@ -63,14 +60,13 @@ int main()
   cout << "Evolution beginning...\n";
   for (step = 1; step <= w; step++) {
     distributions[step % 2] = evolve(distributions[(step - 1) % 2],
-				     adv_param, hon_prob);
+				     adv_prob, hon_prob);
     delete(distributions[(step - 1) % 2]);
     double new_density = distributions[step % 2]->pdensity();
-    //    double new_density_t = distributions[step % 2]->tdensity();
+    double new_density_t = distributions[step % 2]->tdensity();
     if (step % 10 == 0)
-      cout << "(" << step << ", " << new_density << ")\n" << std::flush;}
-  //  cout << "(" << step << ", " << new_density
-  //     << "," << new_density_t  << ")\n" << std::flush;}
+      //    cout << "(" << step << ", " << new_density << ")\n" << std::flush;}
+    cout << "(" << step << ", " << new_density << "," << new_density_t  << ")\n" << std::flush;}
   delete(distributions[w % 2]);
   return 0;
 }
