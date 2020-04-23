@@ -19,9 +19,9 @@ limitations under the License.
 
 enum InitializationType {zero, identity};
 
-const int maxsteps = 10000;
+const int maxsteps = 25000;
 const int footprint = 2 * maxsteps + 1;
-const int maxdelta = 30;
+const int maxdelta = 20;
 
 class Dist_index {
 public:
