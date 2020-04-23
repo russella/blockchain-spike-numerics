@@ -65,8 +65,8 @@ int main()
     double new_density = distributions[step % 2]->pdensity();
     double new_density_t = distributions[step % 2]->tdensity();
     if (step % 10 == 0)
-      //    cout << "(" << step << ", " << new_density << ")\n" << std::flush;}
-    cout << "(" << step << ", " << new_density << "," << new_density_t  << ")\n" << std::flush;}
+      cout << "(" << step << ", " << new_density << ")\n" << std::flush;}
+  // cout << "(" << step << ", " << new_density << "," << new_density_t  << ")\n" << std::flush;}
   delete(distributions[w % 2]);
   return 0;
 }
