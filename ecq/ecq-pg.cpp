@@ -75,9 +75,9 @@ int main(int argc, char **argv)
     distributions[step % 2] = evolve(distributions[(step - 1) % 2],
 				     adv_prob, hon_prob);
     delete(distributions[(step - 1) % 2]);
-    double new_density = distributions[step % 2]->pdensity();
-    //    double new_density_t = distributions[step % 2]->tdensity();
     if (step % 10 == 0)
+      double new_density = distributions[step % 2]->pdensity();
+      //    double new_density_t = distributions[step % 2]->tdensity();
       cout << "(" 
         << "adv. stake: " << adv_stake << ", " 
         << "f: " << f << ", " 
@@ -85,7 +85,6 @@ int main(int argc, char **argv)
         << "step: " << step << ", " 
         << "density: " << new_density << ")\n" << std::flush;
   }
-  // cout << "(" << step << ", " << new_density << "," << new_density_t  << ")\n" << std::flush;}
   delete(distributions[w % 2]);
   cout <<  "========================================================================================================================" << endl;
   return 0;
