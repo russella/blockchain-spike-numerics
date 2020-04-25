@@ -21,6 +21,21 @@ limitations under the License.
 
 using namespace std;
 
+// The Distribution and Dist_index classes are implemented below.
+//
+// The Distribution class is intended to maintain a distribution over
+// pairs of the form (M,T), where M is a "margin" and T is a
+// "transition point." The intention is that these are quantities
+// implicitly determined by a string read in thus far: M is equal to
+// (A - D(H)), the difference between the number of adversarial slots
+// A and the Delta height of the honest slots D(H) observed in the
+// string; T is the "transition point" of the string observed so
+// far--this is the length(the suffix of the string that has maximum
+// height)-1. Thus, if the most recent character increased the Delta
+// height, T=0.
+//
+// This second parameter is sufficient to determine if a new honest
+// slot added to the end of the string will increase the Delta height.
 
 //class Dist_index
 
@@ -53,7 +68,7 @@ Dist_index* Dist_index::evolve(int adversarial,
   int  result_h_transition;
   
   result_beta = beta + adversarial;
-  if (h_transition < delta) {
+  if (h_transition < delta-1) {
     result_h_transition = h_transition+1; }
   else
     if (honest >= 1) {
@@ -70,13 +85,6 @@ Dist_index* Dist_index::evolve(int adversarial,
 
 //class Distribution;
 
-// double Poisson(double lambda, int k) {
-//   if (k < 0) throw std::invalid_argument("Poisson index out of range");
-//   double result = 1.0;
-//   for (int i=1; i <= k; i++)
-//     result = result * (lambda / i);
-//   return( exp(-lambda) * result );
-// }
 
 void Distribution::show() const {
   cout << "Distribution contents...\n";
@@ -156,20 +164,6 @@ Distribution::Distribution(const Distribution* orig) : delta(orig->delta) {
       set(index,orig->get(index)); }
   delete(index);
 }
-
-// double stat_distance(const Distribution* dista,
-// 		     const Distribution* distb) {
-//   double result = 0;
-//   Dist_index* index;
-//   index = new Dist_index(dista->delta,0,0);
-//   for (int beta=-maxsteps; beta <= maxsteps; beta++) 
-//     for (int transition=0; transition <= dista->delta; transition++) {
-//       index->set(beta,transition);
-//       result = result + abs(dista->get(index)
-// 			    -distb->get(index)); }
-//   delete(index);
-//   return(result/2);
-// }
 
 Distribution* evolve(const Distribution* source,
 		     double adv_prob,
