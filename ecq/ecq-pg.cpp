@@ -1,5 +1,5 @@
 /*
-Copyright [2020] Alexander Russell
+Copyright [2020] XXX
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
